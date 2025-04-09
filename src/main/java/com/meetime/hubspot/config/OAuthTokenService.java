@@ -1,48 +1,73 @@
 package com.meetime.hubspot.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.*;
-
-import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class OAuthTokenService {
 
-    @Value("${hubspot.client_id}")
-    private String clientId;
+	@Value("${hubspot.client_id}")
+	private String clientId;
 
-    @Value("${hubspot.client_secret}")
-    private String clientSecret;
+	@Value("${hubspot.client_secret}")
+	private String clientSecret;
 
-    @Value("${hubspot.redirect_uri}")
-    private String redirectUri;
+	@Value("${hubspot.redirect_uri}")
+	private String redirectUri;
 
-    private static final String TOKEN_URL = "https://api.hubapi.com/oauth/v1/token";
+	private static final String TOKEN_URL = "https://api.hubapi.com/oauth/v1/token";
 
-    public String exchangeAuthorizationCode(String code) {
-        RestTemplate restTemplate = new RestTemplate();
+	/**
+	 * Troca o código de autorização por um token de acesso.
+	 *
+	 * @param code Código de autorização recebido.
+	 * @return Token de acesso ou exceção detalhada em caso de erro.
+	 */
+	public String exchangeAuthorizationCode(String code) {
+		if (code == null || code.isEmpty()) {
+			throw new IllegalArgumentException("O código de autorização não pode ser nulo ou vazio.");
+		}
 
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("grant_type", "authorization_code");
-        requestBody.put("client_id", clientId);
-        requestBody.put("client_secret", clientSecret);
-        requestBody.put("redirect_uri", redirectUri);
-        requestBody.put("code", code);
+		RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		// Monta o corpo da requisição como form-data
+		MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+		requestBody.add("grant_type", "authorization_code");
+		requestBody.add("client_id", clientId);
+		requestBody.add("client_secret", clientSecret);
+		requestBody.add("redirect_uri", redirectUri);
+		requestBody.add("code", code);
 
-        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        ResponseEntity<Map> response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, entity, Map.class);
+		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return response.getBody().get("access_token").toString();
-        } else {
-            throw new RuntimeException("ERRO ao TROCAR o código de autorização pelo token. Favor verificar novamente");
-        }
-    }
+		ResponseEntity<Map<String, Object>> response;
+		try {
+			response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, entity,
+					new ParameterizedTypeReference<Map<String, Object>>() {
+					});
+		} catch (Exception e) {
+			throw new RuntimeException("Erro ao enviar requisição: " + e.getMessage());
+		}
+
+		if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+			return response.getBody().get("access_token").toString();
+		} else {
+			throw new RuntimeException("Erro ao trocar o código pelo token. Status: " + response.getStatusCode());
+		}
+	}
 }
