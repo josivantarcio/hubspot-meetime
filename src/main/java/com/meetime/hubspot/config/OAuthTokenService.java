@@ -1,7 +1,5 @@
 package com.meetime.hubspot.config;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -29,20 +27,13 @@ public class OAuthTokenService {
 
 	private static final String TOKEN_URL = "https://api.hubapi.com/oauth/v1/token";
 
-	/**
-	 * Troca o código de autorização por um token de acesso.
-	 *
-	 * @param code Código de autorização recebido.
-	 * @return Token de acesso ou exceção detalhada em caso de erro.
-	 */
-	public String exchangeAuthorizationCode(String code) {
+	public OAuthTokenResponse exchangeAuthorizationCode(String code) {
 		if (code == null || code.isEmpty()) {
 			throw new IllegalArgumentException("O código de autorização não pode ser nulo ou vazio.");
 		}
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		// Monta o corpo da requisição como form-data
 		MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
 		requestBody.add("grant_type", "authorization_code");
 		requestBody.add("client_id", clientId);
@@ -55,17 +46,17 @@ public class OAuthTokenService {
 
 		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
-		ResponseEntity<Map<String, Object>> response;
+		ResponseEntity<OAuthTokenResponse> response;
 		try {
 			response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, entity,
-					new ParameterizedTypeReference<Map<String, Object>>() {
+					new ParameterizedTypeReference<OAuthTokenResponse>() {
 					});
 		} catch (Exception e) {
 			throw new RuntimeException("Erro ao enviar requisição: " + e.getMessage());
 		}
 
 		if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-			return response.getBody().get("access_token").toString();
+			return response.getBody();
 		} else {
 			throw new RuntimeException("Erro ao trocar o código pelo token. Status: " + response.getStatusCode());
 		}
