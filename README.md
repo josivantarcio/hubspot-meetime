@@ -1,105 +1,85 @@
-## 📘 `README.md` — Integração HubSpot com Java 21 + Spring Boot
+## 📄 `README.md`
 
 ```markdown
-# 📡 Integração com HubSpot via OAuth2 - Java 21 + Spring Boot
+# Integração com HubSpot via OAuth2 - Java 21 + Spring Boot
 
-Projeto backend com API REST desenvolvida em Java 21 utilizando Spring Boot, com integração à API do HubSpot via OAuth2 (Authorization Code Flow), criação de contatos e recebimento de webhooks.
+Este projeto tem como objetivo integrar uma aplicação backend em Java com a API do HubSpot, utilizando o fluxo de autenticação OAuth2. A aplicação permite autenticar usuários, criar contatos e receber eventos via webhooks.
 
----
+## Funcionalidades
 
-## ✅ Funcionalidades Implementadas
+- Autenticação via OAuth2 (Authorization Code Flow)
+- Troca de code por access_token e refresh_token
+- Criação de contatos no CRM HubSpot
+- Endpoint para renovação de token via refresh_token
+- Recebimento de notificações por webhook
+- Estrutura modular e segura com Spring Boot
 
-- [x] Autenticação OAuth2 (authorization code flow)
-- [x] Troca do código de autorização por token de acesso
-- [x] Criação de contatos no CRM HubSpot
-- [x] Recebimento de eventos via webhook (ex: contact.creation)
-- [x] Arquitetura modular com boas práticas (Clean Code, SOLID)
-- [x] Configuração de segurança com Spring Security
-
----
-
-## 🛠️ Tecnologias
+## Tecnologias Utilizadas
 
 - Java 21
-- Spring Boot
+- Spring Boot 3.x
+- Spring Web (RestTemplate)
+- Spring Security
 - Maven
-- RestTemplate
-- Postman (para testes)
-- HubSpot Developer Platform
 
----
+## Bibliotecas Utilizadas
 
-## 📂 Estrutura de Diretórios
+| Biblioteca                   | Finalidade                                  |
+|------------------------------|---------------------------------------------|
+| spring-boot-starter-web      | Criação de endpoints REST                   |
+| spring-boot-starter-security | Controle de rotas e autenticação            |
+| spring-web                   | Comunicação HTTP com a API do HubSpot       |
+| spring-boot-devtools         | Hot reload para desenvolvimento local       |
+| spring-boot-maven-plugin     | Empacotamento e execução do projeto         |
+
+## Estrutura do Projeto
 
 ```
 src/main/java/com/meetime/hubspot
-│
-├── config
-│   ├── OAuthConfig.java
-│   ├── OAuthTokenService.java
-│   └── SecurityConfig.java
-│
-├── controller
-│   ├── OAuthController.java
-│   ├── ContactController.java
-│   └── WebhookController.java
-│
-└── service
-    └── HubspotContactService.java
+├── config         # Configurações de OAuth2 e segurança
+├── controller     # Endpoints REST (OAuth, contatos, webhooks)
+├── service        # Lógica de negócio (HubSpot API, refresh)
+├── model          # Representação de dados (OAuthTokenResponse)
+└── resources
 ```
 
----
+## Configuração
 
-## ⚙️ Como executar o projeto localmente
-
-### 1. Pré-requisitos
-
-- Java 21
-- Maven
-- Conta de desenvolvedor no HubSpot + test account
-
-### 2. Configurar variáveis no `application.properties`
+No arquivo `src/main/resources/application.properties`, defina:
 
 ```properties
-hubspot.client_id=SUA_CLIENT_ID
-hubspot.client_secret=SUA_CLIENT_SECRET
+hubspot.client_id=SEU_CLIENT_ID
+hubspot.client_secret=SEU_CLIENT_SECRET
 hubspot.redirect_uri=http://localhost:8080/oauth/callback
 hubspot.scope=crm.objects.contacts.read crm.objects.contacts.write
 ```
 
-### 3. Executar a aplicação
+## Execução
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-### 4. Gerar URL de autorização
+## Endpoints
 
-Acesse no navegador:
+| Método | Rota               | Descrição                                        |
+|--------|--------------------|--------------------------------------------------|
+| GET    | /oauth/authorize   | Gera a URL de autorização com o HubSpot          |
+| GET    | /oauth/callback    | Recebe o código e troca por access_token         |
+| POST   | /oauth/refresh     | Gera novo access_token com base no refresh_token |
+| POST   | /contacts          | Cria um novo contato no CRM HubSpot              |
+| POST   | /webhooks          | Recebe notificações de eventos (webhooks)        |
 
+## Testes com Postman
+
+### Criar contato
+
+```http
+POST http://localhost:8080/contacts
+Authorization: Bearer SEU_ACCESS_TOKEN
+Content-Type: application/json
 ```
-http://localhost:8080/oauth/authorize
-```
 
-Você será redirecionado ao HubSpot para login e autorização.
-
-### 5. Receber o `access_token`
-
-Após autorizar, a aplicação troca o `code` e retorna o `access_token` na tela. Use esse token para os próximos testes.
-
----
-
-## 📬 Testar com Postman
-
-### Criar Contato:
-
-- **POST:** `http://localhost:8080/contacts`
-- **Headers:**
-  ```
-  Authorization: Bearer SEU_ACCESS_TOKEN
-  Content-Type: application/json
-  ```
-- **Body:**
 ```json
 {
   "email": "exemplo@hubspot.com",
@@ -108,10 +88,13 @@ Após autorizar, a aplicação troca o `code` e retorna o `access_token` na tela
 }
 ```
 
-### Simular Webhook:
+### Simular webhook
 
-- **POST:** `http://localhost:8080/webhooks`
-- **Body:**
+```http
+POST http://localhost:8080/webhooks
+Content-Type: application/json
+```
+
 ```json
 [
   {
@@ -124,26 +107,8 @@ Após autorizar, a aplicação troca o `code` e retorna o `access_token` na tela
 ]
 ```
 
----
+## Autor
 
-## 📌 Melhorias Futuras
-
-- Armazenar tokens com validade e refresh automático
-- Validação de assinatura de Webhook (segurança)
-- Persistência de contatos recebidos no webhook
-- Implementação de testes unitários e integração
-
----
-
-## 📎 Repositório GitHub
-
-**Repositório:**  
-[https://github.com/josivantarcio/hubspot-meetime.git](https://github.com/josivantarcio/hubspot-meetime.git)
-
----
-
-## 👨‍💻 Desenvolvido por
-
-**Josevan Oliveira**  
-Engenheiro de Software | Especialista em IA | Full Stack & Data Science  
+Josevan Oliveira  
+GitHub: https://github.com/josivantarcio
 ```
