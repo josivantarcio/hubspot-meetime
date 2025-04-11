@@ -123,7 +123,7 @@ public class Usuario {
 ---
 
 ## 🧑‍💻 Autor
-
+```
 Desenvolvido por **Josevan Oliveira**  
 LinkedIn: [josevanoliveira](https://www.linkedin.com/in/josevanoliveira/)  
 Email: josivantarcio@msn.com
