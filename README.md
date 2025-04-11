@@ -46,3 +46,64 @@ Este projeto visa facilitar a integração de sistemas externos com o HubSpot, g
 ```bash
 git clone https://github.com/josivantarcio/hubspot-meetime.git
 cd hubspot-meetime
+```
+
+### 2. Configurar `application.properties`
+
+Edite o arquivo `src/main/resources/application.properties` com suas credenciais do HubSpot:
+
+```properties
+spring.security.oauth2.client.registration.hubspot.client-id=SEU_CLIENT_ID
+spring.security.oauth2.client.registration.hubspot.client-secret=SEU_CLIENT_SECRET
+spring.security.oauth2.client.registration.hubspot.redirect-uri=http://localhost:8080/login/oauth2/code/hubspot
+```
+
+### 3. Executar
+
+```bash
+mvn spring-boot:run
+```
+
+A aplicação estará disponível em:  
+📍 `http://localhost:8080`
+
+---
+
+## 📑 Documentação da API
+
+Após rodar o projeto, acesse a interface Swagger:
+
+🔗 [`http://localhost:8080/swagger-ui/index.html`](http://localhost:8080/swagger-ui/index.html)
+
+---
+
+## 📊 Casos de Uso
+
+> Exemplo de aplicação na **carcinicultura (criação de camarões):**
+>
+> - Captura de leads via formulários integrados ao HubSpot.
+> - Notificações automáticas para equipe técnica ao receber novo contato comercial.
+> - Painel com status de negociação integrado a sistemas legados via API.
+> - Aplicações móveis sincronizadas com dados do CRM via endpoints REST seguros.
+
+---
+
+## 🤝 Contribuições
+
+Contribuições são muito bem-vindas!  
+Abra uma issue ou envie um Pull Request para sugerir melhorias.
+
+---
+
+## 📄 Licença
+
+Distribuído sob a licença **MIT**.  
+Consulte o arquivo [`LICENSE`](LICENSE) para mais detalhes.
+
+---
+
+## 📬 Contato
+
+Desenvolvido por [**Josevan Oliveira**](https://www.linkedin.com/in/josevan-oliveira/)  
+Email: josevanoliveira.dev@gmail.com
+```
