@@ -109,13 +109,12 @@ Abra uma issue ou envie um Pull Request para sugerir melhorias.
 
 ## 📄 Licença
 
-Distribuído sob a licença **MIT**.  
-Consulte o arquivo [`LICENSE`](LICENSE) para mais detalhes.
+Distribuído sob a licença **Apache License**.  
 
 ---
 
 ## 📬 Contato
 ```
-Desenvolvido por [**Josevan Oliveira**](https://www.linkedin.com/in/josevanoliveira/)  
+Desenvolvido por [Josevan Oliveira](https://www.linkedin.com/in/josevanoliveira/)  
 Email: josivantarcio@msn.com
 ```
