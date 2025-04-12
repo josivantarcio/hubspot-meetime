@@ -1,4 +1,16 @@
 # 📊 HubSpot Meetime Integration
+<!-- Status do Build -->
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+<!-- Último Commit -->
+![Last Commit](https://img.shields.io/github/last-commit/josivantarcio/hubspot-meetime)
+<!-- Linguagem principal -->
+![Top Language](https://img.shields.io/github/languages/top/josivantarcio/hubspot-meetime)
+<!-- Licença (supondo que seja MIT, podemos ajustar se for outra) -->
+![License](https://img.shields.io/github/license/josivantarcio/hubspot-meetime)
+<!-- Versão (ajustável se tiver um release/tag, senão usamos texto estático) -->
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+<!-- Contador de visitantes (via shields.io + rastreador de pixel externo) -->
+![Visitors](https://visitor-badge.laobi.icu/badge?page_id=josivantarcio.hubspot-meetime)
 
 Integração corporativa com a plataforma **HubSpot**, utilizando autenticação OAuth2, controle de permissões com **Spring Security**, documentação interativa via **Swagger** e integração pronta para automações e webhooks.
 
@@ -103,7 +115,7 @@ Consulte o arquivo [`LICENSE`](LICENSE) para mais detalhes.
 ---
 
 ## 📬 Contato
-
-Desenvolvido por [**Josevan Oliveira**](https://www.linkedin.com/in/josevan-oliveira/)  
-Email: josevanoliveira.dev@gmail.com
+```
+Desenvolvido por [**Josevan Oliveira**](https://www.linkedin.com/in/josevanoliveira/)  
+Email: josivantarcio@msn.com
 ```
